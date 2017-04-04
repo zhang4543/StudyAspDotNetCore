@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using StudyAspDotNetCore.Extensions;
 
 namespace StudyAspDotNetCore
 {
@@ -46,8 +47,12 @@ namespace StudyAspDotNetCore
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            //ip中间件
+            app.UseRequestIP();
 
             app.UseStaticFiles();
+
+           
 
             app.UseMvc(routes =>
             {
