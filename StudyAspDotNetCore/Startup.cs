@@ -8,6 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using StudyAspDotNetCore.Extensions;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace StudyAspDotNetCore
 {
@@ -30,6 +34,9 @@ namespace StudyAspDotNetCore
         {
             // Add framework services.
             services.AddMvc();
+
+            //目录浏览
+            services.AddDirectoryBrowser();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,7 +57,42 @@ namespace StudyAspDotNetCore
             //ip中间件
             app.UseRequestIP();
 
+           
+
+            //启用默认页
+            DefaultFilesOptions option = new DefaultFilesOptions();
+            option.DefaultFileNames.Clear();
+            option.DefaultFileNames.Add("MyDefault.html");
+            app.UseDefaultFiles();
+
+            //启用静态文件
             app.UseStaticFiles();
+
+
+            //MIME映射修改
+            var provider = new FileExtensionContentTypeProvider();
+            provider.Mappings[".cs"] = "text/plain";//wwwroot下的.cs可以访问了
+            app.UseStaticFiles(new StaticFileOptions() {
+                FileProvider=new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),@"wwwroot")),
+                ContentTypeProvider=provider
+            });
+
+
+            //开放wwwroot以外的文件夹,访问静态文件,但是访问不了里面的.cs文件.?
+            app.UseStaticFiles(new StaticFileOptions (){
+                FileProvider=new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(),@"MyStaticFiles")),
+                RequestPath=new PathString("/StaticFiles"),
+                ServeUnknownFileTypes=true,//开启不能识别的文件访问,不加默认404,这样指定文件夹下.cs文件可以作为文本浏览了
+                DefaultContentType= "text/plain"
+
+            });
+
+            //允许直接浏览目录
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions() {
+                FileProvider=new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),@"MyStaticFiles")),
+                RequestPath=new PathString("/StaticFiles")
+            });
 
            
 
