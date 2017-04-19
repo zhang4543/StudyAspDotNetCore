@@ -12,6 +12,7 @@ using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
+using System.Text;
 
 namespace StudyAspDotNetCore
 {
@@ -42,6 +43,10 @@ namespace StudyAspDotNetCore
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            //解决控制台输入乱码
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            //日志
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
