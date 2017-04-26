@@ -65,10 +65,11 @@ namespace StudyAspDotNetCore
            
 
             //启用默认页
+            //UseDefaultFiles 必须在 UseStaticFiles 之前调用。UseDefaultFiles 只是重写了 URL，而不是真的提供了这样一个文件。你必须开启静态文件中间件（UseStaticFiles）来提供这个文件。
             DefaultFilesOptions option = new DefaultFilesOptions();
             option.DefaultFileNames.Clear();
             option.DefaultFileNames.Add("MyDefault.html");
-            app.UseDefaultFiles();
+            app.UseDefaultFiles(option);
 
             //启用静态文件
             app.UseStaticFiles();
