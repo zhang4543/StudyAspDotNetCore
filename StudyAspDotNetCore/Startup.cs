@@ -103,25 +103,7 @@ namespace StudyAspDotNetCore
                 RequestPath = new PathString("/StaticFiles")
             });
 
-            #region snippet_AppRun
-            app.Run(async (context) =>
-            {
-                if (context.Request.Query.ContainsKey("throw"))
-                {
-                    throw new Exception("Exception triggered!");
-                }
-                var builder = new StringBuilder();
-                builder.AppendLine("<html><body>Hello World!");
-                builder.AppendLine("<ul>");
-                builder.AppendLine("<li><a href=\"/?throw=true\">Throw Exception</a></li>");
-                builder.AppendLine("<li><a href=\"/missingpage\">Missing Page</a></li>");
-                builder.AppendLine("</ul>");
-                builder.AppendLine("</body></html>");
-
-                context.Response.ContentType = "text/html";
-                await context.Response.WriteAsync(builder.ToString());
-            });
-            #endregion
+           
 
             app.UseMvc(routes =>
             {
