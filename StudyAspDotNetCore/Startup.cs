@@ -47,8 +47,8 @@ namespace StudyAspDotNetCore
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             //日志
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            // loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            // loggerFactory.AddDebug();
 
             if (env.IsDevelopment())
             {
